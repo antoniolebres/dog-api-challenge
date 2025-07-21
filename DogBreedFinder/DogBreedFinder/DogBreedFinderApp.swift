@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct DogBreedFinderApp: App {
+
     var body: some Scene {
+
         WindowGroup {
-            ContentView()
+
+            BaseView()
         }
     }
 }
