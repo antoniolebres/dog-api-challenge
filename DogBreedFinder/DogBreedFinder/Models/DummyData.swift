@@ -15,7 +15,15 @@ class DummyData {
         .init(id: 1, name: "Affenpinscher", temperament: "Stubborn, Curious, Playful, Adventurous, Active, Fun-loving", origin: "Germany, France", breedGroup: "Toy", image: DummyData.image),
         .init(id: 2, name: "Afghan Hound", temperament: "Aloof, Clownish, Dignified, Independent, Happy", origin: "Afghanistan, Iran, Pakistan", breedGroup: "Hound", image: DummyData.image),
         .init(id: 3, name: "African Hunting Dog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
-        .init(id: 4, name: "Alapaha Blue Blood Bulldog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image)
+        .init(id: 4, name: "Alapaha Blue Blood Bulldog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
+        .init(id: 5, name: "Alaskan Husky", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
+        .init(id: 6, name: "Alaskan Malamute", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
+        .init(id: 7, name: "American Bulldog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
+        .init(id: 8, name: "Airedale Terrier", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
+        .init(id: 9, name: "AAkbash Dog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
+        .init(id: 10, name: "Akita", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
+        .init(id: 11, name: "American Bully", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
+        .init(id: 12, name: "American Eskimo Dog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
     ]
 }
 

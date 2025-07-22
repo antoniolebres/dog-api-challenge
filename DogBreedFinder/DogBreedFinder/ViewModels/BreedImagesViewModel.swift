@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum ViewPresentationType: String, CaseIterable {
 
@@ -27,10 +28,10 @@ enum ViewPresentationType: String, CaseIterable {
 
 class BreedImagesViewModel: ObservableObject {
 
-    @Published var pickerSelection: ViewPresentationType = .grid
+    @Published var selectedPresentationType: ViewPresentationType = UIDevice.isPad ? .grid : .list
     @Published var breeds: [Breed] = []
 
-    func getBreedImages() {
+    func getBreeds() {
 
         // TODO: Implement this after adding the proper API implementation
 
@@ -46,5 +47,18 @@ class BreedImagesViewModel: ObservableObject {
                 print("Error: \(error)")
             }
         }
+    }
+}
+
+// MARK: - Actions
+
+extension BreedImagesViewModel {
+
+    func didTapSortAlphabeticallyAscending() {
+
+    }
+
+    func didTapSortAlphabeticallyDescending() {
+
     }
 }

@@ -15,7 +15,7 @@ struct BreedImagesView: View {
         
         VStack {
 
-            switch self.viewModel.pickerSelection {
+            switch self.viewModel.selectedPresentationType {
 
             case .grid:
                 self.gridView
@@ -24,43 +24,51 @@ struct BreedImagesView: View {
                 self.listView
             }
         }
+        .navigationTitle("Breeds")
         .onAppear {
 
-            self.viewModel.getBreedImages()
+            self.viewModel.getBreeds()
         }
-        .navigationTitle("Breeds")
         .toolbar {
 
             ToolbarItemGroup(placement: .topBarTrailing) {
 
-                Picker("View type", selection: self.$viewModel.pickerSelection) {
-
-                    ForEach(ViewPresentationType.allCases, id: \.self) { type in
-
-                        Image(systemName: type.systemIconName)
-                            .tag(type)
-                    }
-                }
-                .labelsHidden()
-                .pickerStyle(.inline)
+                self.viewPresentationTypePicker
+                self.sortMenu
             }
         }
     }
 }
 
-// MARK: - Private
+// MARK: - Private (List & Grid)
 
 private extension BreedImagesView {
+
+    enum Constants {
+
+        static let cardWidth: CGFloat = 200
+        static let columnLayout = Array(
+            repeating: GridItem(.fixed(Self.cardWidth)),
+            count: UIDevice.isPad ? 3 : 2
+        )
+    }
 
     var gridView: some View {
 
         ScrollView {
 
-            LazyVGrid(columns: Array(repeating: GridItem(), count: UIDevice.isPad ? 3 : 2)) {
+            LazyVGrid(
+                columns: Constants.columnLayout,
+                alignment: .center,
+                spacing: 16
+            ) {
 
                 ForEach(self.viewModel.breeds, id: \.id) { breed in
 
-                    BreedCardView(breed: breed, textFont: UIDevice.isPad ? .body : .caption)
+                    BreedCardView(
+                        breed: breed,
+                        textFont: UIDevice.isPad ? .body : .caption
+                    )
                 }
             }
             .padding(.horizontal)
@@ -75,6 +83,54 @@ private extension BreedImagesView {
                 .listRowSeparator(.hidden)
         }
         .listStyle(.plain)
+    }
+}
+
+// MARK: - Private (Toolbar)
+
+private extension BreedImagesView {
+
+    var viewPresentationTypePicker: some View {
+
+        Picker("View type", selection: self.$viewModel.selectedPresentationType) {
+
+            ForEach(ViewPresentationType.allCases, id: \.self) { type in
+
+                Image(systemName: type.systemIconName)
+                    .tag(type)
+            }
+        }
+        .labelsHidden()
+        .pickerStyle(.inline)
+    }
+
+    var sortMenu: some View {
+
+        Menu {
+
+            Button {
+
+                self.viewModel.didTapSortAlphabeticallyAscending()
+
+            } label: {
+
+                Label("Alphabetically (A-Z)", systemImage: "arrow.down")
+            }
+
+            Button {
+
+                self.viewModel.didTapSortAlphabeticallyDescending()
+
+            } label: {
+
+                Label("Alphabetically (Z-A)", systemImage: "arrow.up")
+            }
+
+        } label: {
+
+            Label("Sort", systemImage: "arrow.up.arrow.down")
+        }
+        .tint(.primary)
     }
 }
 
