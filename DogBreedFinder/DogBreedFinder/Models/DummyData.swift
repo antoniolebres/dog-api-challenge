@@ -7,6 +7,25 @@
 
 #if DEBUG
 
+class DummyRepository: DogBreedRepository {
+
+    func getBreeds(page: Int) async throws -> [Breed] {
+
+        // Simulating network request
+        try await Task.sleep(for: .seconds(2))
+
+        return Array(DummyData.breeds.prefix((page + 1) * 5))
+    }
+    
+    func searchBreeds(query: String) async throws -> [Breed] {
+
+        // Simulating network request
+        try await Task.sleep(for: .seconds(2))
+
+        return DummyData.breeds.filter { $0.name.localizedCaseInsensitiveContains(query) }
+    }
+}
+
 class DummyData {
 
     static let image: BreedImage = .init(id: "a1b2c3", width: 1024, height: 60, urlString: nil)

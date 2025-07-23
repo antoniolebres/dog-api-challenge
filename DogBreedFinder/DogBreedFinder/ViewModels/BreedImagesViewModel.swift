@@ -31,15 +31,22 @@ class BreedImagesViewModel: ObservableObject {
     @Published var selectedPresentationType: ViewPresentationType = UIDevice.isPad ? .grid : .list
     @Published var breeds: [Breed] = []
 
+    private let dogBreedRepository: DogBreedRepository
+
+    init(dogBreedRepository: DogBreedRepository) {
+
+        self.dogBreedRepository = dogBreedRepository
+    }
+
     @MainActor
     func getBreeds() async {
 
-        // TODO: Implement this after adding the proper API implementation
+        // TODO: Consider the use of states to handle pagination and errors
 
         do {
 
-            try await Task.sleep(for: .seconds(2))
-            self.breeds = DummyData.breeds
+            // TODO: Handle pagination
+            self.breeds = try await self.dogBreedRepository.getBreeds(page: 0)
 
         } catch {
 

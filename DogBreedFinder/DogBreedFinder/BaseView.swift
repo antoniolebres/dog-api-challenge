@@ -21,7 +21,7 @@ struct BaseView: View {
 
                     NavigationStack(path: self.$router.routes) {
 
-                        tab.route.view
+                        self.router.navigationDestination(for: tab.route)
                     }
                     .tint(.brown)
                 }
@@ -33,5 +33,9 @@ struct BaseView: View {
 
 #Preview {
     BaseView()
-        .environmentObject(NavigationRouter())
+        .environmentObject(
+            NavigationRouter(
+                viewFactory: .init(dogBreedRepository: DummyRepository())
+            )
+        )
 }

@@ -11,7 +11,12 @@ struct BreedImagesView: View {
 
     @EnvironmentObject private var router: NavigationRouter
 
-    @StateObject private var viewModel = BreedImagesViewModel()
+    @ObservedObject private var viewModel: BreedImagesViewModel
+
+    init(viewModel: BreedImagesViewModel) {
+
+        self.viewModel = viewModel
+    }
 
     var body: some View {
         
@@ -28,7 +33,9 @@ struct BreedImagesView: View {
         }
         .dogBreedFinderBackground()
         .navigationTitle("Breeds")
-        .navigationDestination(for: Route.self) { $0.view }
+        .navigationDestination(for: Route.self) {
+            self.router.navigationDestination(for: $0)
+        }
         .task {
 
             await self.viewModel.getBreeds()
@@ -148,7 +155,13 @@ private extension BreedImagesView {
 
 #Preview {
     NavigationStack {
-        BreedImagesView()
-            .environmentObject(NavigationRouter())
+        BreedImagesView(
+            viewModel: .init(dogBreedRepository: DummyRepository())
+        )
+        .environmentObject(
+            NavigationRouter(
+                viewFactory: .init(dogBreedRepository: DummyRepository())
+            )
+        )
     }
 }

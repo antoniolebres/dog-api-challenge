@@ -9,16 +9,23 @@ import SwiftUI
 
 class ViewFactory {
 
+    let dogBreedRepository: DogBreedRepository
+
+    init(dogBreedRepository: DogBreedRepository) {
+
+        self.dogBreedRepository = dogBreedRepository
+    }
+
     @ViewBuilder
-    static func buildView(for route: Route) -> some View {
+    func buildView(for route: Route) -> some View {
 
         switch route {
 
         case .breedDetails(let breed):
-            BreedDetailsView(viewModel: BreedDetailsViewModel(breed: breed))
+            BreedDetailsView(viewModel: .init(breed: breed))
 
         case .breeds:
-            BreedImagesView()
+            BreedImagesView(viewModel: .init(dogBreedRepository: self.dogBreedRepository))
 
         case .search:
             BreedSearchView()

@@ -130,5 +130,9 @@ private extension BreedDetailsView {
 
 #Preview {
     BreedDetailsView(viewModel: .init(breed: DummyData.breeds[0]))
-        .environmentObject(NavigationRouter())
+        .environmentObject(
+            NavigationRouter(
+                viewFactory: .init(dogBreedRepository: DummyRepository())
+            )
+        )
 }

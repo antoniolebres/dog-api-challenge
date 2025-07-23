@@ -10,14 +10,14 @@ import SwiftUI
 @main
 struct DogBreedFinderApp: App {
 
-    @StateObject private var router = NavigationRouter()
+    private let dependencyManager = DogBreedFinderDependencyManager()
 
     var body: some Scene {
 
         WindowGroup {
 
             BaseView()
-                .environmentObject(self.router)
+                .environmentObject(self.dependencyManager.router)
         }
     }
 }
