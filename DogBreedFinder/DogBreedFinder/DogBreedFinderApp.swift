@@ -10,11 +10,14 @@ import SwiftUI
 @main
 struct DogBreedFinderApp: App {
 
+    @StateObject private var router = NavigationRouter()
+
     var body: some Scene {
 
         WindowGroup {
 
             BaseView()
+                .environmentObject(self.router)
         }
     }
 }

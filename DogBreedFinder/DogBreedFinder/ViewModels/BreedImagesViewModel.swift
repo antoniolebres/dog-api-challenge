@@ -31,21 +31,19 @@ class BreedImagesViewModel: ObservableObject {
     @Published var selectedPresentationType: ViewPresentationType = UIDevice.isPad ? .grid : .list
     @Published var breeds: [Breed] = []
 
-    func getBreeds() {
+    @MainActor
+    func getBreeds() async {
 
         // TODO: Implement this after adding the proper API implementation
 
-        Task { @MainActor in
+        do {
 
-            do {
+            try await Task.sleep(for: .seconds(2))
+            self.breeds = DummyData.breeds
 
-                try await Task.sleep(for: .seconds(2))
-                self.breeds = DummyData.breeds
+        } catch {
 
-            } catch {
-
-                print("Error: \(error)")
-            }
+            print("Error: \(error)")
         }
     }
 }

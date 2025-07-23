@@ -5,7 +5,7 @@
 //  Created by António Lebres on 21/07/2025.
 //
 
-struct Breed: Identifiable, Decodable {
+struct Breed: Identifiable, Decodable, Hashable {
 
     let id: Int
     let name: String

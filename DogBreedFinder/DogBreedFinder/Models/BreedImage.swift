@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BreedImage: Decodable {
+struct BreedImage: Decodable, Hashable {
 
     enum CodingKeys: String, CodingKey {
 

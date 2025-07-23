@@ -9,6 +9,8 @@ import SwiftUI
 
 struct BreedImagesView: View {
 
+    @EnvironmentObject private var router: NavigationRouter
+
     @StateObject private var viewModel = BreedImagesViewModel()
 
     var body: some View {
@@ -25,9 +27,10 @@ struct BreedImagesView: View {
             }
         }
         .navigationTitle("Breeds")
-        .onAppear {
+        .navigationDestination(for: Route.self) { $0.view }
+        .task {
 
-            self.viewModel.getBreeds()
+            await self.viewModel.getBreeds()
         }
         .toolbar {
 
@@ -81,6 +84,9 @@ private extension BreedImagesView {
 
             BreedCardView(breed: breed)
                 .listRowSeparator(.hidden)
+                .onTapGesture {
+                    self.router.navigate(to: .breedDetails(breed: breed))
+                }
         }
         .listStyle(.plain)
     }
@@ -137,5 +143,6 @@ private extension BreedImagesView {
 #Preview {
     NavigationStack {
         BreedImagesView()
+            .environmentObject(NavigationRouter())
     }
 }

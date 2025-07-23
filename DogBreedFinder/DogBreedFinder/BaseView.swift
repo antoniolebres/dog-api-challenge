@@ -9,23 +9,20 @@ import SwiftUI
 
 struct BaseView: View {
 
+    @EnvironmentObject private var router: NavigationRouter
+
     var body: some View {
 
         TabView {
 
-            Tab("Breeds", systemImage: "dog") {
+            ForEach(Tabs.allCases, id: \.rawValue) { tab in
 
-                NavigationStack {
+                Tab(tab.rawValue, systemImage: tab.systemImageName) {
 
-                    BreedImagesView()
-                }
-            }
+                    NavigationStack(path: self.$router.routes) {
 
-            Tab("Search", systemImage: "magnifyingglass") {
-
-                NavigationStack {
-
-                    BreedSearchView()
+                        tab.route.view
+                    }
                 }
             }
         }
@@ -34,4 +31,5 @@ struct BaseView: View {
 
 #Preview {
     BaseView()
+        .environmentObject(NavigationRouter())
 }

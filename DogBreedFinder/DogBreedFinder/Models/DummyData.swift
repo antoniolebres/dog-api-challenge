@@ -12,6 +12,9 @@ class DummyData {
     static let image: BreedImage = .init(id: "a1b2c3", width: 1024, height: 60, urlString: nil)
 
     static let breeds: [Breed] = [
+        .init(id: 12, name: "American Eskimo Dog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
+        .init(id: 10, name: "Akita", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
+        .init(id: 3, name: "African Hunting Dog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
         .init(id: 1, name: "Affenpinscher", temperament: "Stubborn, Curious, Playful, Adventurous, Active, Fun-loving", origin: "Germany, France", breedGroup: "Toy", image: DummyData.image),
         .init(id: 2, name: "Afghan Hound", temperament: "Aloof, Clownish, Dignified, Independent, Happy", origin: "Afghanistan, Iran, Pakistan", breedGroup: "Hound", image: DummyData.image),
         .init(id: 3, name: "African Hunting Dog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
@@ -21,9 +24,7 @@ class DummyData {
         .init(id: 7, name: "American Bulldog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
         .init(id: 8, name: "Airedale Terrier", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
         .init(id: 9, name: "AAkbash Dog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
-        .init(id: 10, name: "Akita", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
         .init(id: 11, name: "American Bully", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
-        .init(id: 12, name: "American Eskimo Dog", temperament: "Wild, Hardworking, Dutiful", origin: "", breedGroup: "", image: DummyData.image),
     ]
 }
 
