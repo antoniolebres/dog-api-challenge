@@ -23,9 +23,11 @@ struct BaseView: View {
 
                         tab.route.view
                     }
+                    .tint(.brown)
                 }
             }
         }
+        .tint(.brown)
     }
 }
 

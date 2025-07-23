@@ -26,6 +26,7 @@ struct BreedImagesView: View {
                 self.listView
             }
         }
+        .dogBreedFinderBackground()
         .navigationTitle("Breeds")
         .navigationDestination(for: Route.self) { $0.view }
         .task {
@@ -72,6 +73,9 @@ private extension BreedImagesView {
                         breed: breed,
                         textFont: UIDevice.isPad ? .body : .caption
                     )
+                    .onTapGesture {
+                        self.router.navigate(to: .breedDetails(breed: breed))
+                    }
                 }
             }
             .padding(.horizontal)
@@ -84,11 +88,13 @@ private extension BreedImagesView {
 
             BreedCardView(breed: breed)
                 .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
                 .onTapGesture {
                     self.router.navigate(to: .breedDetails(breed: breed))
                 }
         }
         .listStyle(.plain)
+        .background(.clear)
     }
 }
 

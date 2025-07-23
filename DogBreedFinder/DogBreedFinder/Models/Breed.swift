@@ -11,6 +11,8 @@ struct Breed: Identifiable, Decodable, Hashable {
     let name: String
     let temperament: String?
     let origin: String?
+    let countryCode: String?
+    let countryCodes: [String]?
     let breedGroup: String?
     let image: BreedImage?
 }
