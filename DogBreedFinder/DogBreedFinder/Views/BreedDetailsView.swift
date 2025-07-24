@@ -26,19 +26,38 @@ struct BreedDetailsView: View {
 
                 AsyncImage(url: self.viewModel.breed.image?.url) { image in
 
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(maxWidth: .infinity, maxHeight: 300)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(.ultraThinMaterial, lineWidth: 4))
-                        .shadow(radius: 2)
+                    ZStack {
+
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity, maxHeight: 300)
+                            .clipShape(Circle())
+                            .blur(radius: 5)
+
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: .infinity, maxHeight: 300)
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(.ultraThinMaterial, lineWidth: 4))
+                            .shadow(radius: 2)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: 300)
 
                 } placeholder: {
 
-                    Circle()
-                        .frame(height: 300)
-                        .background(.gray)
+                    ZStack {
+
+                        Circle()
+                            .fill(.brown)
+                            .strokeBorder(.ultraThinMaterial, lineWidth: 4)
+
+                        Image(systemName: "dog.fill")
+                            .font(.largeTitle)
+                            .foregroundStyle(.ultraThickMaterial)
+                    }
+                    .frame(height: 300)
                 }
 
                 HStack {
