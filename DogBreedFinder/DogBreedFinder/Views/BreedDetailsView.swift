@@ -11,7 +11,7 @@ struct BreedDetailsView: View {
 
     @EnvironmentObject private var router: NavigationRouter
 
-    @ObservedObject private var viewModel: BreedDetailsViewModel
+    private var viewModel: BreedDetailsViewModel
 
     init(viewModel: BreedDetailsViewModel) {
 
@@ -24,13 +24,22 @@ struct BreedDetailsView: View {
 
             VStack {
 
-                Image(["test", "test2"].randomElement()!)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: .infinity, maxHeight: 300)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(.ultraThinMaterial, lineWidth: 4))
-                    .shadow(radius: 2)
+                AsyncImage(url: self.viewModel.breed.image?.url) { image in
+
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: .infinity, maxHeight: 300)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(.ultraThinMaterial, lineWidth: 4))
+                        .shadow(radius: 2)
+
+                } placeholder: {
+
+                    Circle()
+                        .frame(height: 300)
+                        .background(.gray)
+                }
 
                 HStack {
 
@@ -44,32 +53,12 @@ struct BreedDetailsView: View {
 
                 VStack(alignment: .leading, spacing: 16) {
 
-                    if let group = self.viewModel.breed.breedGroup,
-                       group.isEmpty == false {
+                    ForEach(self.viewModel.breedDetailSections, id: \.title) { section in
 
                         self.dogRowView(
-                            systemIconName: "rectangle.3.group",
-                            title: "Group",
-                            description: group
-                        )
-                    }
-
-                    if let origin = self.viewModel.breedOrigin {
-
-                        self.dogRowView(
-                            systemIconName: "globe.desk",
-                            title: "Origin",
-                            description: origin
-                        )
-                    }
-
-                    if let temperament = self.viewModel.breed.temperament,
-                       temperament.isEmpty == false {
-
-                        self.dogRowView(
-                            systemIconName: "heart",
-                            title: "Temperament",
-                            description: temperament
+                            systemIconName: section.systemIconName,
+                            title: section.title,
+                            description: section.description
                         )
                     }
                 }

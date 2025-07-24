@@ -11,11 +11,11 @@ struct BreedImagesView: View {
 
     @EnvironmentObject private var router: NavigationRouter
 
-    @ObservedObject private var viewModel: BreedImagesViewModel
+    @StateObject private var viewModel: BreedImagesViewModel
 
     init(viewModel: BreedImagesViewModel) {
 
-        self.viewModel = viewModel
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
@@ -33,19 +33,21 @@ struct BreedImagesView: View {
         }
         .dogBreedFinderBackground()
         .navigationTitle("Breeds")
-        .navigationDestination(for: Route.self) {
-            self.router.navigationDestination(for: $0)
-        }
         .task {
 
-            await self.viewModel.getBreeds()
+            print("=== Task block")
+
+            if self.viewModel.shouldRequestBreeds {
+
+                print("=== Task block - triggered")
+                await self.viewModel.getBreeds()
+            }
         }
         .toolbar {
 
             ToolbarItemGroup(placement: .topBarTrailing) {
 
                 self.viewPresentationTypePicker
-                self.sortMenu
             }
         }
     }
@@ -113,7 +115,7 @@ private extension BreedImagesView {
 
         Picker("View type", selection: self.$viewModel.selectedPresentationType) {
 
-            ForEach(ViewPresentationType.allCases, id: \.self) { type in
+            ForEach(BreedsPresentationType.allCases, id: \.self) { type in
 
                 Image(systemName: type.systemIconName)
                     .tag(type)
@@ -121,35 +123,6 @@ private extension BreedImagesView {
         }
         .labelsHidden()
         .pickerStyle(.inline)
-    }
-
-    var sortMenu: some View {
-
-        Menu {
-
-            Button {
-
-                self.viewModel.didTapSortAlphabeticallyAscending()
-
-            } label: {
-
-                Label("Alphabetically (A-Z)", systemImage: "arrow.down")
-            }
-
-            Button {
-
-                self.viewModel.didTapSortAlphabeticallyDescending()
-
-            } label: {
-
-                Label("Alphabetically (Z-A)", systemImage: "arrow.up")
-            }
-
-        } label: {
-
-            Label("Sort", systemImage: "arrow.up.arrow.down")
-        }
-        .tint(.primary)
     }
 }
 

@@ -9,7 +9,8 @@ import SwiftUI
 
 class NavigationRouter: ObservableObject {
 
-    @Published var routes = [Route]()
+    @Published var routes: [DogBreedFinderAppTab : [Route]] = [:]
+    @Published var currentTab: DogBreedFinderAppTab = .breeds
 
     private let viewFactory: ViewFactory
 
@@ -20,25 +21,44 @@ class NavigationRouter: ObservableObject {
 
     func navigate(to route: Route) {
 
-        self.routes.append(route)
+        self.routes[self.currentTab, default: []].append(route)
     }
 
     func navigateBack() {
 
-        guard self.routes.isEmpty == false else {
+        guard self.routes[self.currentTab]?.isEmpty == false else {
+
             return
         }
 
-        self.routes.removeLast()
+        self.routes[self.currentTab]?.removeLast()
     }
 
-    func reset() {
+    func navigateToRoot() {
 
-        self.routes.removeAll()
+        self.routes[self.currentTab]?.removeAll()
     }
+}
+
+// MARK: - Destination-related methods
+
+extension NavigationRouter {
 
     func navigationDestination(for route: Route) -> some View {
 
         return self.viewFactory.buildView(for: route)
+    }
+
+    func tabDestination(for tab: DogBreedFinderAppTab) -> some View {
+
+        return self.viewFactory.buildView(for: tab.baseRoute)
+    }
+
+    func navigationStackPath(for tab: DogBreedFinderAppTab) -> Binding<[Route]> {
+
+        return Binding(
+            get: { self.routes[tab, default: []] },
+            set: { self.routes[tab] = $0 }
+        )
     }
 }

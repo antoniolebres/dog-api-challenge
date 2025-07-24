@@ -13,15 +13,18 @@ struct BaseView: View {
 
     var body: some View {
 
-        TabView {
+        TabView(selection: self.$router.currentTab) {
 
-            ForEach(Tabs.allCases, id: \.rawValue) { tab in
+            ForEach(DogBreedFinderAppTab.allCases, id: \.rawValue) { tab in
+                
+                Tab(tab.rawValue, systemImage: tab.systemImageName, value: tab) {
 
-                Tab(tab.rawValue, systemImage: tab.systemImageName) {
+                    NavigationStack(path: self.router.navigationStackPath(for: tab)) {
 
-                    NavigationStack(path: self.$router.routes) {
-
-                        self.router.navigationDestination(for: tab.route)
+                        self.router.tabDestination(for: tab)
+                            .navigationDestination(for: Route.self) {
+                                self.router.navigationDestination(for: $0)
+                            }
                     }
                     .tint(.brown)
                 }

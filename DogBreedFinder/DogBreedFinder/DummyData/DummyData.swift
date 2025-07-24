@@ -7,6 +7,8 @@
 
 #if DEBUG
 
+import Foundation
+
 class DummyRepository: DogBreedRepository {
 
     func getBreeds(page: Int) async throws -> [Breed] {
@@ -28,7 +30,12 @@ class DummyRepository: DogBreedRepository {
 
 class DummyData {
 
-    static let image: BreedImage = .init(id: "a1b2c3", width: 1024, height: 60, urlString: nil)
+    static func image() -> BreedImage {
+
+        let imageURL = Bundle.main.url(forResource: ["test", "test2"].randomElement()!, withExtension: "jpg")
+
+        return .init(id: "a1b2c3", width: 1024, height: 60, urlString: imageURL?.absoluteString)
+    }
 
     static let breeds: [Breed] = [
         .init(
@@ -39,7 +46,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "Non-Sporting",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 10,
@@ -49,7 +56,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 15,
@@ -59,7 +66,7 @@ class DummyData {
             countryCode: "AG",
             countryCodes: nil,
             breedGroup: "",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 1,
@@ -69,7 +76,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "Toy",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 2,
@@ -79,7 +86,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "Hound",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 3,
@@ -89,7 +96,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: ["AO", "BW"],
             breedGroup: "",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 4,
@@ -99,7 +106,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 5,
@@ -109,7 +116,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 6,
@@ -119,7 +126,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 7,
@@ -129,7 +136,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 8,
@@ -139,7 +146,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 9,
@@ -149,7 +156,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "",
-            image: DummyData.image
+            image: DummyData.image()
         ),
         .init(
             id: 11,
@@ -159,7 +166,7 @@ class DummyData {
             countryCode: nil,
             countryCodes: nil,
             breedGroup: "",
-            image: DummyData.image
+            image: DummyData.image()
         )
     ]
 }

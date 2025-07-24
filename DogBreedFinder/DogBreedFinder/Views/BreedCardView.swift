@@ -25,12 +25,16 @@ struct BreedCardView: View {
 
         ZStack(alignment: .bottom) {
 
-            // TODO: Replace by AsyncImage and use the real one
+            AsyncImage(url: self.breed.image?.url) { image in
 
-            Image(["test", "test2"].randomElement()!)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(height: 250)
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 250)
+
+            } placeholder: {
+                ProgressView()
+            }
 
             HStack {
 

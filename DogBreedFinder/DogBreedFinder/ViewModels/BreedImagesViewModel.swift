@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-enum ViewPresentationType: String, CaseIterable {
+enum BreedsPresentationType: String, CaseIterable {
 
     case grid = "Grid"
     case list = "List"
@@ -28,9 +28,15 @@ enum ViewPresentationType: String, CaseIterable {
 
 class BreedImagesViewModel: ObservableObject {
 
-    @Published var selectedPresentationType: ViewPresentationType = UIDevice.isPad ? .grid : .list
+    @Published var selectedPresentationType: BreedsPresentationType = UIDevice.isPad ? .grid : .list
     @Published var breeds: [Breed] = []
 
+    var shouldRequestBreeds: Bool {
+
+        self.hasTriggeredInitialRequest == false
+    }
+
+    private var hasTriggeredInitialRequest = false
     private let dogBreedRepository: DogBreedRepository
 
     init(dogBreedRepository: DogBreedRepository) {
@@ -46,24 +52,14 @@ class BreedImagesViewModel: ObservableObject {
         do {
 
             // TODO: Handle pagination
-            self.breeds = try await self.dogBreedRepository.getBreeds(page: 0)
+            let breeds = try await self.dogBreedRepository.getBreeds(page: 0)
+
+            self.breeds = breeds
+            self.hasTriggeredInitialRequest = true
 
         } catch {
 
             print("Error: \(error)")
         }
-    }
-}
-
-// MARK: - Actions
-
-extension BreedImagesViewModel {
-
-    func didTapSortAlphabeticallyAscending() {
-
-    }
-
-    func didTapSortAlphabeticallyDescending() {
-
     }
 }

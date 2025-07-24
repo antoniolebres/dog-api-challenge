@@ -5,7 +5,7 @@
 //  Created by António Lebres on 22/07/2025.
 //
 
-enum Tabs: String, CaseIterable {
+enum DogBreedFinderAppTab: String, CaseIterable {
 
     case breeds = "Breeds"
     case search = "Search"
@@ -22,7 +22,7 @@ enum Tabs: String, CaseIterable {
         }
     }
 
-    var route: Route {
+    var baseRoute: Route {
 
         switch self {
 

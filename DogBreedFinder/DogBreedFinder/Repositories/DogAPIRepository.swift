@@ -70,7 +70,7 @@ class DogAPIRepository: BaseRepository<DogAPIResource>, DogBreedRepository {
 
     private enum Constants {
 
-        static let baseURLString = "api.thedogapi.com/v1/"
+        static let baseURLString = "https://api.thedogapi.com/v1/"
     }
 
     init() {
