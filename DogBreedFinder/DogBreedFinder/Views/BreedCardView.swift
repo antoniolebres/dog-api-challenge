@@ -25,15 +25,30 @@ struct BreedCardView: View {
 
         ZStack(alignment: .bottom) {
 
-            AsyncImage(url: self.breed.image?.url) { image in
+            GeometryReader { geo in
+                AsyncImage(url: self.breed.image?.url) { image in
+                    
+                    image
+                        .resizable()
+                        //.aspectRatio(contentMode: .fill)
+                        .scaledToFill()
+                        .transition(.opacity)
+                        //.frame(minWidth: 175, maxWidth: 300, minHeight: 117, maxHeight: 200)
+                        .frame(width: geo.size.width, height: geo.size.height)
+                        .clipped()
+                    
+                } placeholder: {
 
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(height: 250)
-
-            } placeholder: {
-                ProgressView()
+                    ZStack {
+                        Image(systemName: "dog.fill")
+                            .foregroundStyle(.ultraThickMaterial)
+                    }
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .background(
+                        .black.opacity(0.2),
+                        in: RoundedRectangle(cornerRadius: Constants.cornerRadius)
+                    )
+                }
             }
 
             HStack {
@@ -47,6 +62,7 @@ struct BreedCardView: View {
             .padding(.vertical, Constants.verticalPadding)
             .background(.ultraThinMaterial)
         }
+        .frame(minWidth: 175, maxWidth: 350, minHeight: 117, maxHeight: 233)
         .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
         .shadow(radius: Constants.shadowRadius)
     }

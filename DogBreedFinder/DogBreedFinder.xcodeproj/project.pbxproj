@@ -10,9 +10,22 @@
 		B2929C512E2E78F8009FDC24 /* DogBreedFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DogBreedFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B2685BD82E326E7300A7D157 /* Exceptions for "DogBreedFinder" folder in "DogBreedFinder" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B2929C502E2E78F8009FDC24 /* DogBreedFinder */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B2929C532E2E78F8009FDC24 /* DogBreedFinder */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B2685BD82E326E7300A7D157 /* Exceptions for "DogBreedFinder" folder in "DogBreedFinder" target */,
+			);
 			path = DogBreedFinder;
 			sourceTree = "<group>";
 		};
@@ -256,6 +269,7 @@
 				DEVELOPMENT_TEAM = KBUXQ4DWTV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DogBreedFinder/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Dog Breed Finder";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -285,6 +299,7 @@
 				DEVELOPMENT_TEAM = KBUXQ4DWTV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DogBreedFinder/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Dog Breed Finder";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

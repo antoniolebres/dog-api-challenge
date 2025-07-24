@@ -14,7 +14,7 @@ enum DogAPIResource: BaseRequestResource {
         static let pageSize = 20
     }
 
-    case getBreeds(page: Int)
+    case getBreeds(page: Int, pageSize: Int = Constants.pageSize)
     case searchBreeds(query: String)
 
     var path: String {
@@ -33,10 +33,10 @@ enum DogAPIResource: BaseRequestResource {
 
         switch self {
 
-        case .getBreeds(let page):
+        case .getBreeds(let page, let pageSize):
             return [
                 .init(name: "page", value: page.description),
-                .init(name: "limit", value: Constants.pageSize.description)
+                .init(name: "limit", value: pageSize.description)
             ]
 
         case .searchBreeds(let query):
@@ -66,25 +66,57 @@ enum DogAPIResource: BaseRequestResource {
     }
 }
 
-class DogAPIRepository: BaseRepository<DogAPIResource>, DogBreedRepository {
+struct DogAPIRepositoryConfiguration {
 
     private enum Constants {
 
         static let baseURLString = "https://api.thedogapi.com/v1/"
+        static let dogAPIKeyBundleKey = "DOG_API_KEY"
     }
 
-    init() {
+    let baseURLString: String
+    let apiKey: String
 
-        super.init(baseURL: Constants.baseURLString)
+    // Only for demo purposes
+    static let defaultConfiguration: DogAPIRepositoryConfiguration = .init(
+        baseURLString: Constants.baseURLString,
+        apiKey: Bundle.main.infoDictionary?[Constants.dogAPIKeyBundleKey] as? String ?? "Unknown"
+    )
+}
+
+class DogAPIRepository: BaseRepository<DogAPIResource>, DogBreedRepository {
+
+    private enum Constants {
+
+        static let authorizationHeaderField = "x-api-key"
     }
 
-    func getBreeds(page: Int) async throws -> [Breed] {
+    private lazy var authorizationHeader: [String: String] = {
 
-        try await self.request(resource: .getBreeds(page: page))
+        return [Constants.authorizationHeaderField : self.configuration.apiKey]
+    }()
+
+    private let configuration: DogAPIRepositoryConfiguration
+
+    init(configuration: DogAPIRepositoryConfiguration = .defaultConfiguration) {
+
+        self.configuration = configuration
+        super.init(baseURL: configuration.baseURLString)
+    }
+
+    func getBreeds(page: Int, pageSize: Int) async throws -> [Breed] {
+
+        try await self.request(
+            resource: .getBreeds(page: page, pageSize: pageSize),
+            additionalHeaders: self.authorizationHeader
+        )
     }
     
     func searchBreeds(query: String) async throws -> [Breed] {
 
-        try await self.request(resource: .searchBreeds(query: query))
+        try await self.request(
+            resource: .searchBreeds(query: query),
+            additionalHeaders: self.authorizationHeader
+        )
     }
 }

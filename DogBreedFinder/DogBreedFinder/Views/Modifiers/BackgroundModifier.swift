@@ -12,7 +12,7 @@ struct BackgroundModifier: ViewModifier {
     func body(content: Content) -> some View {
 
         content
-            .background(.brown.opacity(0.1))
+            .background(Color(red: 0.92, green: 0.88, blue: 0.82))
     }
 }
 

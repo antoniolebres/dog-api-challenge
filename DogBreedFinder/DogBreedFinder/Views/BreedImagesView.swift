@@ -22,26 +22,45 @@ struct BreedImagesView: View {
         
         VStack {
 
-            switch self.viewModel.selectedPresentationType {
+            switch self.viewModel.state {
 
-            case .grid:
-                self.gridView
+            case .loading:
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .controlSize(.extraLarge)
+                    .tint(.brown)
+                    .background(.clear)
 
-            case .list:
-                self.listView
+            case .loaded(let breeds, let isLoadingNextPage):
+                switch self.viewModel.selectedViewPresentationType {
+
+                case .grid:
+                    self.gridView(
+                        breeds: breeds,
+                        isLoadingNextPage: isLoadingNextPage
+                    )
+
+                case .list:
+                    self.listView(
+                        breeds: breeds,
+                        isLoadingNextPage: isLoadingNextPage
+                    )
+                }
+
+            case .error:
+                ErrorView {
+                    Task {
+                        await self.viewModel.retry()
+                    }
+                }
             }
         }
-        .dogBreedFinderBackground()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationTitle("Breeds")
-        .task {
+        .dogBreedFinderBackground()
+        .onFirstAppearTask {
 
-            print("=== Task block")
-
-            if self.viewModel.shouldRequestBreeds {
-
-                print("=== Task block - triggered")
-                await self.viewModel.getBreeds()
-            }
+            await self.viewModel.getBreedsFirstPage()
         }
         .toolbar {
 
@@ -59,14 +78,10 @@ private extension BreedImagesView {
 
     enum Constants {
 
-        static let cardWidth: CGFloat = 200
-        static let columnLayout = Array(
-            repeating: GridItem(.fixed(Self.cardWidth)),
-            count: UIDevice.isPad ? 3 : 2
-        )
+        static let columnLayout = [GridItem(.adaptive(minimum: 180))]
     }
 
-    var gridView: some View {
+    func gridView(breeds: [Breed], isLoadingNextPage: Bool) -> some View {
 
         ScrollView {
 
@@ -76,7 +91,7 @@ private extension BreedImagesView {
                 spacing: 16
             ) {
 
-                ForEach(self.viewModel.breeds, id: \.id) { breed in
+                ForEach(breeds) { breed in
 
                     BreedCardView(
                         breed: breed,
@@ -85,22 +100,59 @@ private extension BreedImagesView {
                     .onTapGesture {
                         self.router.navigate(to: .breedDetails(breed: breed))
                     }
+                    .onAppear {
+                        Task {
+                            await self.viewModel.getBreedsNextPageIfNeeded(currentBreed: breed)
+                        }
+                    }
                 }
             }
             .padding(.horizontal)
+
+            if isLoadingNextPage {
+
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .controlSize(.extraLarge)
+                    .tint(.brown)
+                    .background(.clear)
+            }
         }
     }
 
-    var listView: some View {
+    func listView(breeds: [Breed], isLoadingNextPage: Bool) -> some View {
 
-        List(self.viewModel.breeds) { breed in
+        List {
 
-            BreedCardView(breed: breed)
+            ForEach(breeds) { breed in
+
+                BreedRowView(
+                    breed: breed,
+                    textFont: UIDevice.isPad ? .body : .caption
+                )
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
                 .onTapGesture {
                     self.router.navigate(to: .breedDetails(breed: breed))
                 }
+                .onAppear {
+                    Task {
+                        await self.viewModel.getBreedsNextPageIfNeeded(currentBreed: breed)
+                    }
+                }
+            }
+
+            if isLoadingNextPage {
+
+                ProgressView()
+                    .id(UUID())
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                    .controlSize(.extraLarge)
+                    .frame(maxWidth: .infinity)
+                    .tint(.brown)
+                    .background(.clear)
+            }
         }
         .listStyle(.plain)
         .background(.clear)
@@ -113,7 +165,7 @@ private extension BreedImagesView {
 
     var viewPresentationTypePicker: some View {
 
-        Picker("View type", selection: self.$viewModel.selectedPresentationType) {
+        Picker("View type", selection: self.$viewModel.selectedViewPresentationType) {
 
             ForEach(BreedsPresentationType.allCases, id: \.self) { type in
 

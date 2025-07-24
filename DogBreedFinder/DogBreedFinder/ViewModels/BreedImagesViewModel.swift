@@ -26,17 +26,24 @@ enum BreedsPresentationType: String, CaseIterable {
     }
 }
 
+enum BreedImagesViewModelState {
+
+    case loading
+    case loaded(breeds: [Breed], isLoadingNextPage: Bool)
+    case error(Error)
+}
+
 class BreedImagesViewModel: ObservableObject {
 
-    @Published var selectedPresentationType: BreedsPresentationType = UIDevice.isPad ? .grid : .list
-    @Published var breeds: [Breed] = []
+    @Published var selectedViewPresentationType: BreedsPresentationType = UIDevice.isPad ? .grid : .list
+    @Published var state: BreedImagesViewModelState = .loading
 
-    var shouldRequestBreeds: Bool {
+    private var currentPage: Int = 0
+    private let pageSize: Int = 20
 
-        self.hasTriggeredInitialRequest == false
-    }
+    private var canLoadMoreData = true
+    private var isFetching = false
 
-    private var hasTriggeredInitialRequest = false
     private let dogBreedRepository: DogBreedRepository
 
     init(dogBreedRepository: DogBreedRepository) {
@@ -45,21 +52,72 @@ class BreedImagesViewModel: ObservableObject {
     }
 
     @MainActor
-    func getBreeds() async {
+    func retry() async {
 
-        // TODO: Consider the use of states to handle pagination and errors
+        self.state = .loading
+
+        await self.getBreedsFirstPage()
+    }
+
+    func getBreedsFirstPage() async {
+
+        await self.getBreeds(reset: true)
+    }
+
+    @MainActor
+    func getBreedsNextPageIfNeeded(currentBreed: Breed?) async {
+
+        guard let currentBreed,
+              case .loaded(let breeds, let isLoadingNextPage) = self.state else { return }
+
+        let isLastBreed = breeds.last == currentBreed
+
+        guard isLastBreed,
+              isLoadingNextPage == false,
+              self.canLoadMoreData else { return }
+
+        self.state = .loaded(breeds: breeds, isLoadingNextPage: true)
+
+        await self.getBreeds(reset: false)
+    }
+}
+
+// MARK: - Private
+
+private extension BreedImagesViewModel {
+
+    @MainActor
+    func getBreeds(reset: Bool) async {
+
+        guard self.isFetching == false else { return }
+
+        self.isFetching = true
+
+        defer { self.isFetching = false }
 
         do {
 
-            // TODO: Handle pagination
-            let breeds = try await self.dogBreedRepository.getBreeds(page: 0)
+            let newBreeds = try await self.dogBreedRepository.getBreeds(
+                page: self.currentPage,
+                pageSize: self.pageSize
+            )
 
-            self.breeds = breeds
-            self.hasTriggeredInitialRequest = true
+            if reset {
+
+                self.state = .loaded(breeds: newBreeds, isLoadingNextPage: false)
+
+            } else if case .loaded(let breeds, _) = self.state {
+
+                let allBreeds = breeds + newBreeds
+                self.state = .loaded(breeds: allBreeds, isLoadingNextPage: false)
+            }
+
+            self.canLoadMoreData = newBreeds.count == self.pageSize
+            self.currentPage += 1
 
         } catch {
 
-            print("Error: \(error)")
+            self.state = .error(error)
         }
     }
 }

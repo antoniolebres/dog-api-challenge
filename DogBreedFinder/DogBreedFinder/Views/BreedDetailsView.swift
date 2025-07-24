@@ -86,7 +86,7 @@ private extension BreedDetailsView {
         } label: {
 
             Label("Paw-some!", systemImage: "pawprint.fill")
-                .font(.title3)
+                .font(.body)
                 .bold()
                 .foregroundStyle(.ultraThickMaterial)
                 .frame(maxWidth: .infinity)

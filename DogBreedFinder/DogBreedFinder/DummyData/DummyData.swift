@@ -11,12 +11,13 @@ import Foundation
 
 class DummyRepository: DogBreedRepository {
 
-    func getBreeds(page: Int) async throws -> [Breed] {
+    func getBreeds(page: Int, pageSize: Int) async throws -> [Breed] {
 
         // Simulating network request
         try await Task.sleep(for: .seconds(2))
 
-        return Array(DummyData.breeds.prefix((page + 1) * 5))
+        // return Array(DummyData.breeds.prefix((page + 1) * 5))
+        return DummyData.breeds
     }
     
     func searchBreeds(query: String) async throws -> [Breed] {
