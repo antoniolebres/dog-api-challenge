@@ -28,7 +28,7 @@ class ViewFactory {
             BreedImagesView(viewModel: .init(dogBreedRepository: self.dogBreedRepository))
 
         case .search:
-            BreedSearchView()
+            BreedSearchView(viewModel: .init(dogBreedRepository: self.dogBreedRepository))
         }
     }
 }

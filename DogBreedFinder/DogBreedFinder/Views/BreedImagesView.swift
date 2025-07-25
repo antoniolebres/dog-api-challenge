@@ -25,11 +25,7 @@ struct BreedImagesView: View {
             switch self.viewModel.state {
 
             case .loading:
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .controlSize(.extraLarge)
-                    .tint(.brown)
-                    .background(.clear)
+                DogBreedProgressView()
 
             case .loaded(let breeds, let isLoadingNextPage):
                 switch self.viewModel.selectedViewPresentationType {
