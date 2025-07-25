@@ -11,12 +11,13 @@ enum DogAPIResource: BaseRequestResource {
 
     private enum Constants {
 
-        static let pageSize = 20
+        static let defaultPageSize = 20
+        static let defaultSortOption: DogBreedRepositorySortOption = .ascending
     }
 
     case getBreeds(page: Int,
-                   pageSize: Int = Constants.pageSize,
-                   order: DogBreedRepositorySortOption = .ascending)
+                   pageSize: Int = Constants.defaultPageSize,
+                   order: DogBreedRepositorySortOption = Constants.defaultSortOption)
 
     case searchBreeds(query: String)
 

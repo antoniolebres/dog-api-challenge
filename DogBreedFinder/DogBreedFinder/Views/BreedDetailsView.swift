@@ -36,19 +36,19 @@ struct BreedDetailsView: View {
                                 image
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(maxWidth: .infinity, maxHeight: 300)
-                                    .blur(radius: 5)
+                                    .frame(maxWidth: .infinity, maxHeight: Constants.height)
+                                    .blur(radius: Constants.blurRadius)
 
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth: .infinity, maxHeight: 300)
+                                    .frame(maxWidth: .infinity, maxHeight: Constants.height)
                             }
                             .clipShape(Circle())
                             .overlay(
-                                Circle().stroke(.ultraThinMaterial, lineWidth: 4)
+                                Circle().stroke(.ultraThinMaterial, lineWidth: Constants.strokeLineWidth)
                             )
-                            .shadow(radius: 2)
+                            .shadow(radius: Constants.shadowRadius)
                         }
 
                     } else {
@@ -57,13 +57,13 @@ struct BreedDetailsView: View {
 
                             Circle()
                                 .fill(.brown)
-                                .strokeBorder(.ultraThinMaterial, lineWidth: 4)
+                                .strokeBorder(.ultraThinMaterial, lineWidth: Constants.strokeLineWidth)
 
                             Image(systemName: "dog.fill")
                                 .font(.largeTitle)
                                 .foregroundStyle(.ultraThickMaterial)
                         }
-                        .frame(height: 300)
+                        .frame(height: Constants.height)
                     }
                 }
 
@@ -77,7 +77,7 @@ struct BreedDetailsView: View {
                 }
                 .padding(.vertical)
 
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: Constants.stackSpacing) {
 
                     ForEach(self.viewModel.breedDetailSections, id: \.title) { section in
 
@@ -103,6 +103,17 @@ struct BreedDetailsView: View {
 
 private extension BreedDetailsView {
 
+    enum Constants {
+
+        static let height: CGFloat = 300
+        static let blurRadius: CGFloat = 5
+        static let shadowRadius: CGFloat = 2
+        static let strokeLineWidth: CGFloat = 4
+        static let stackSpacing: CGFloat = 16
+        static let cornerRadius: CGFloat = 10
+        static let opacity: CGFloat = 0.2
+    }
+
     var gotItButton: some View {
 
         Button {
@@ -118,7 +129,7 @@ private extension BreedDetailsView {
                 .frame(maxWidth: .infinity)
         }
         .padding()
-        .background(.brown, in: RoundedRectangle(cornerRadius: 10))
+        .background(.brown, in: RoundedRectangle(cornerRadius: Constants.cornerRadius))
         .padding()
     }
 
@@ -139,7 +150,10 @@ private extension BreedDetailsView {
             Text(description)
         }
         .padding()
-        .background(.brown.opacity(0.2), in: RoundedRectangle(cornerRadius: 10))
+        .background(
+            .brown.opacity(Constants.opacity),
+            in: RoundedRectangle(cornerRadius: Constants.cornerRadius)
+        )
     }
 }
 

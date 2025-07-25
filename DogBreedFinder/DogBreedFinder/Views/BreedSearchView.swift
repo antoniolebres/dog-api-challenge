@@ -59,9 +59,15 @@ struct BreedSearchView: View {
 
 private extension BreedSearchView {
 
+    enum Constants {
+
+        static let stackSpacing: CGFloat = 16
+        static let cornerRadius: CGFloat = 10
+    }
+
     var idleView: some View {
 
-        VStack(spacing: 16) {
+        VStack(spacing: Constants.stackSpacing) {
 
             Image(systemName: "pawprint")
                 .font(.largeTitle)
@@ -74,12 +80,13 @@ private extension BreedSearchView {
     func resultView(result: Breed) -> some View {
 
         HStack {
+
             VStack(alignment: .leading) {
                 
                 Text(result.name)
                     .font(.headline)
                 
-                if let origin = result.origin,
+                if let origin = result.breedOrigin,
                    origin.isEmpty == false {
                     
                     Text(origin)
@@ -100,7 +107,7 @@ private extension BreedSearchView {
         .frame(maxWidth: .infinity)
         .background(.brown)
         .foregroundStyle(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
     }
 
     func searchResultsList(results: [Breed]) -> some View {
@@ -120,7 +127,7 @@ private extension BreedSearchView {
 
     func noResultsView(searchTerm: String) -> some View {
 
-        VStack(spacing: 16) {
+        VStack(spacing: Constants.stackSpacing) {
 
             Image(systemName: "exclamationmark.magnifyingglass")
                 .font(.largeTitle)

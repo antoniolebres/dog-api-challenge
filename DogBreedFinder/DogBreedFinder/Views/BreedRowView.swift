@@ -55,7 +55,7 @@ struct BreedRowView: View {
                         maxHeight: Constants.maxHeight
                     )
                     .background(
-                        .black.opacity(0.2),
+                        .black.opacity(Constants.opacity),
                         in: RoundedRectangle(cornerRadius: Constants.cornerRadius)
                     )
                 }
@@ -86,10 +86,12 @@ private extension BreedRowView {
         static let backgroundColor: Color = .init(red: 0.9, green: 0.75, blue: 0.53)
         static let borderWidth: CGFloat = 2
         static let cornerRadius: CGFloat = 10
+
         static let minWidth: CGFloat = 75
         static let minHeight: CGFloat = 50
         static let maxWidth: CGFloat = 150
         static let maxHeight: CGFloat = 100
+        static let opacity: CGFloat = 0.2
     }
 }
 

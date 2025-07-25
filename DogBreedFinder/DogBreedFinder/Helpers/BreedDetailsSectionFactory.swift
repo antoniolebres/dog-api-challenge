@@ -30,7 +30,7 @@ enum BreedDetailsSectionFactory {
             )
         }
 
-        if let origin = Self.breedOrigin(from: breed) {
+        if let origin = breed.breedOrigin {
 
             sections.append(
                 .init(
@@ -54,33 +54,5 @@ enum BreedDetailsSectionFactory {
         }
 
         return sections
-    }
-}
-
-// MARK: - Private
-
-private extension BreedDetailsSectionFactory {
-
-    static func breedOrigin(from breed: Breed) -> String? {
-
-        if let origin = breed.origin,
-           origin.isEmpty == false {
-
-            return origin
-        }
-
-        if let countryCode = breed.countryCode {
-
-            return CountryHelper.countryName(for: countryCode)
-        }
-
-        if let countryCodes = breed.countryCodes {
-
-            return countryCodes
-                .compactMap { CountryHelper.countryName(for: $0) }
-                .joined(separator: ", ")
-        }
-
-        return nil
     }
 }

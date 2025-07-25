@@ -47,7 +47,7 @@ struct BreedCardView: View {
                         }
                         .frame(width: geo.size.width, height: geo.size.height)
                         .background(
-                            .black.opacity(0.2),
+                            .black.opacity(Constants.opacity),
                             in: RoundedRectangle(cornerRadius: Constants.cornerRadius)
                         )
                     }
@@ -65,7 +65,12 @@ struct BreedCardView: View {
             .padding(.vertical, Constants.verticalPadding)
             .background(.ultraThinMaterial)
         }
-        .frame(minWidth: 175, maxWidth: 350, minHeight: 117, maxHeight: 233)
+        .frame(
+            minWidth: Constants.minWidth,
+            maxWidth: Constants.maxWidth,
+            minHeight: Constants.minHeight,
+            maxHeight: Constants.maxHeight
+        )
         .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
         .shadow(radius: Constants.shadowRadius)
     }
@@ -80,6 +85,12 @@ private extension BreedCardView {
         static let verticalPadding: CGFloat = 10
         static let cornerRadius: CGFloat = 10
         static let shadowRadius: CGFloat = 4
+        static let opacity: CGFloat = 0.2
+
+        static let minWidth: CGFloat = 175
+        static let minHeight: CGFloat = 117
+        static let maxWidth: CGFloat = 350
+        static let maxHeight: CGFloat = 233
     }
 }
 

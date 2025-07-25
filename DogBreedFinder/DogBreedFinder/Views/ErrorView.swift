@@ -26,11 +26,11 @@ struct ErrorView: View {
 
     var body: some View {
         
-        VStack(spacing: 24) {
+        VStack(spacing: Constants.stackSpacing) {
 
             Image(systemName: "exclamationmark.circle.fill")
                 .foregroundStyle(.brown)
-                .font(.system(size: 50))
+                .font(.system(size: Constants.mainSystemIconFontSize))
 
             Text(self.title)
                 .font(.title)
@@ -54,13 +54,27 @@ struct ErrorView: View {
                         .bold()
                         .foregroundStyle(.foreground)
                 }
-                .padding(10)
+                .padding(Constants.padding)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(.brown, lineWidth: 2)
+                    RoundedRectangle(cornerRadius: Constants.cornerRadius)
+                        .stroke(.brown, lineWidth: Constants.strokeLineWidth)
                 )
             }
         }
+    }
+}
+
+// MARK: - Private
+
+private extension ErrorView {
+
+    enum Constants {
+
+        static let padding: CGFloat = 10
+        static let cornerRadius: CGFloat = 10
+        static let strokeLineWidth: CGFloat = 2
+        static let mainSystemIconFontSize: CGFloat = 50
+        static let stackSpacing: CGFloat = 24
     }
 }
 

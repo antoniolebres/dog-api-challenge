@@ -1,5 +1,5 @@
 //
-//  Router.swift
+//  NavigationRouter.swift
 //  DogBreedFinder
 //
 //  Created by António Lebres on 22/07/2025.

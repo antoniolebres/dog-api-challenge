@@ -80,6 +80,7 @@ private extension BreedImagesView {
     enum Constants {
 
         static let columnLayout = [GridItem(.adaptive(minimum: 180))]
+        static let gridSpacing: CGFloat = 16
     }
 
     func gridView(breeds: [Breed], isLoadingNextPage: Bool) -> some View {
@@ -89,7 +90,7 @@ private extension BreedImagesView {
             LazyVGrid(
                 columns: Constants.columnLayout,
                 alignment: .center,
-                spacing: 16
+                spacing: Constants.gridSpacing
             ) {
 
                 ForEach(breeds) { breed in
@@ -142,7 +143,7 @@ private extension BreedImagesView {
                 if isLoadingNextPage {
 
                     DogBreedProgressView()
-                        .id(UUID())
+                        .id(UUID()) // to make sure it always appears
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -175,7 +176,9 @@ private extension BreedImagesView {
     var sortMenu: some View {
 
         Picker("Sort Order", selection: self.$viewModel.selectedOrder) {
+
             ForEach(SortOptions.allCases, id: \.self) { order in
+
                 Text(order.rawValue)
             }
         }
