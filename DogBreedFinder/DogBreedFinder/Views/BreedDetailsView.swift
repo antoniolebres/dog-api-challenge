@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct BreedDetailsView: View {
 
@@ -24,40 +25,46 @@ struct BreedDetailsView: View {
 
             VStack {
 
-                AsyncImage(url: self.viewModel.breed.image?.url) { image in
+                LazyImage(url: self.viewModel.breed.image?.url) { state in
 
-                    ZStack {
+                    if let image = state.image {
 
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: .infinity, maxHeight: 300)
+                        ZStack {
+
+                            Group {
+
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity, maxHeight: 300)
+                                    .blur(radius: 5)
+
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxWidth: .infinity, maxHeight: 300)
+                            }
                             .clipShape(Circle())
-                            .blur(radius: 5)
-
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: .infinity, maxHeight: 300)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(.ultraThinMaterial, lineWidth: 4))
+                            .overlay(
+                                Circle().stroke(.ultraThinMaterial, lineWidth: 4)
+                            )
                             .shadow(radius: 2)
+                        }
+
+                    } else {
+
+                        ZStack {
+
+                            Circle()
+                                .fill(.brown)
+                                .strokeBorder(.ultraThinMaterial, lineWidth: 4)
+
+                            Image(systemName: "dog.fill")
+                                .font(.largeTitle)
+                                .foregroundStyle(.ultraThickMaterial)
+                        }
+                        .frame(height: 300)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: 300)
-
-                } placeholder: {
-
-                    ZStack {
-
-                        Circle()
-                            .fill(.brown)
-                            .strokeBorder(.ultraThinMaterial, lineWidth: 4)
-
-                        Image(systemName: "dog.fill")
-                            .font(.largeTitle)
-                            .foregroundStyle(.ultraThickMaterial)
-                    }
-                    .frame(height: 300)
                 }
 
                 HStack {
@@ -88,7 +95,7 @@ struct BreedDetailsView: View {
 
             self.gotItButton
         }
-        .background(.brown.opacity(0.1))
+        .dogBreedFinderBackground()
     }
 }
 

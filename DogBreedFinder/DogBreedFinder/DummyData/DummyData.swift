@@ -14,16 +14,15 @@ class DummyRepository: DogBreedRepository {
     func getBreeds(page: Int, pageSize: Int, order: DogBreedRepositorySortOption) async throws -> [Breed] {
 
         // Simulating network request
-        try await Task.sleep(for: .seconds(2))
+        try await Task.sleep(for: .seconds(1))
 
-        // return Array(DummyData.breeds.prefix((page + 1) * 5))
         return DummyData.breeds
     }
     
     func searchBreeds(query: String) async throws -> [Breed] {
 
         // Simulating network request
-        try await Task.sleep(for: .seconds(2))
+        try await Task.sleep(for: .seconds(1))
 
         return DummyData.breeds.filter { $0.name.localizedCaseInsensitiveContains(query) }
     }

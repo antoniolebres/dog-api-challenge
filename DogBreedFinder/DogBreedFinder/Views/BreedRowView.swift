@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct BreedRowView: View {
 
@@ -25,36 +26,39 @@ struct BreedRowView: View {
 
         HStack {
 
-            AsyncImage(url: self.breed.image?.url) { image in
+            LazyImage(url: self.breed.image?.url) { state in
 
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
+                if let image = state.image {
+
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(
+                            minWidth: Constants.minWidth,
+                            maxWidth: Constants.maxWidth,
+                            minHeight: Constants.minHeight,
+                            maxHeight: Constants.maxHeight
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
+                        .transition(.opacity)
+
+                } else {
+
+                    ZStack {
+                        Image(systemName: "dog.fill")
+                            .foregroundStyle(.ultraThickMaterial)
+                    }
                     .frame(
                         minWidth: Constants.minWidth,
                         maxWidth: Constants.maxWidth,
                         minHeight: Constants.minHeight,
                         maxHeight: Constants.maxHeight
                     )
-                    .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
-                    .transition(.opacity)
-
-            } placeholder: {
-
-                ZStack {
-                    Image(systemName: "dog.fill")
-                        .foregroundStyle(.ultraThickMaterial)
+                    .background(
+                        .black.opacity(0.2),
+                        in: RoundedRectangle(cornerRadius: Constants.cornerRadius)
+                    )
                 }
-                .frame(
-                    minWidth: Constants.minWidth,
-                    maxWidth: Constants.maxWidth,
-                    minHeight: Constants.minHeight,
-                    maxHeight: Constants.maxHeight
-                )
-                .background(
-                    .black.opacity(0.2),
-                    in: RoundedRectangle(cornerRadius: Constants.cornerRadius)
-                )
             }
 
             Spacer()

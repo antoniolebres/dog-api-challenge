@@ -45,7 +45,7 @@ struct BreedSearchView: View {
             }
             .searchable(
                 text: self.$viewModel.searchTerm,
-                placement: .navigationBarDrawer(displayMode: .always),
+                placement: .navigationBarDrawer(displayMode: .automatic),
                 prompt: Text("Start typing to search...")
             )
         }
@@ -73,27 +73,34 @@ private extension BreedSearchView {
 
     func resultView(result: Breed) -> some View {
 
-        VStack(alignment: .leading) {
-
-            Text(result.name)
-                .font(.headline)
-
-            if let origin = result.origin,
-               origin.isEmpty == false {
-
-                Text(origin)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+        HStack {
+            VStack(alignment: .leading) {
+                
+                Text(result.name)
+                    .font(.headline)
+                
+                if let origin = result.origin,
+                   origin.isEmpty == false {
+                    
+                    Text(origin)
+                        .font(.subheadline)
+                }
+                
+                if let temperament = result.temperament,
+                   temperament.isEmpty == false {
+                    
+                    Text(temperament)
+                        .font(.caption)
+                }
             }
 
-            if let temperament = result.temperament,
-               temperament.isEmpty == false {
-
-                Text(temperament)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            Spacer()
         }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(.brown)
+        .foregroundStyle(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 
     func searchResultsList(results: [Breed]) -> some View {
@@ -101,10 +108,14 @@ private extension BreedSearchView {
         List(results) { result in
 
             self.resultView(result: result)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
                 .onTapGesture {
                     self.router.navigate(to: .breedDetails(breed: result))
                 }
         }
+        .listStyle(.plain)
+        .background(.clear)
     }
 
     func noResultsView(searchTerm: String) -> some View {

@@ -60,9 +60,13 @@ struct BreedImagesView: View {
         }
         .toolbar {
 
-            ToolbarItemGroup(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .topBarLeading) {
 
                 self.viewPresentationTypePicker
+            }
+
+            ToolbarItemGroup(placement: .topBarTrailing) {
+
                 self.sortMenu
             }
         }

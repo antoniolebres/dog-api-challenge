@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct BreedCardView: View {
 
@@ -26,28 +27,30 @@ struct BreedCardView: View {
         ZStack(alignment: .bottom) {
 
             GeometryReader { geo in
-                AsyncImage(url: self.breed.image?.url) { image in
-                    
-                    image
-                        .resizable()
-                        //.aspectRatio(contentMode: .fill)
-                        .scaledToFill()
-                        .transition(.opacity)
-                        //.frame(minWidth: 175, maxWidth: 300, minHeight: 117, maxHeight: 200)
-                        .frame(width: geo.size.width, height: geo.size.height)
-                        .clipped()
-                    
-                } placeholder: {
 
-                    ZStack {
-                        Image(systemName: "dog.fill")
-                            .foregroundStyle(.ultraThickMaterial)
+                LazyImage(url: self.breed.image?.url) { state in
+
+                    if let image = state.image {
+
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .transition(.opacity)
+                            .frame(width: geo.size.width, height: geo.size.height)
+                            .clipped()
+
+                    } else {
+
+                        ZStack {
+                            Image(systemName: "dog.fill")
+                                .foregroundStyle(.ultraThickMaterial)
+                        }
+                        .frame(width: geo.size.width, height: geo.size.height)
+                        .background(
+                            .black.opacity(0.2),
+                            in: RoundedRectangle(cornerRadius: Constants.cornerRadius)
+                        )
                     }
-                    .frame(width: geo.size.width, height: geo.size.height)
-                    .background(
-                        .black.opacity(0.2),
-                        in: RoundedRectangle(cornerRadius: Constants.cornerRadius)
-                    )
                 }
             }
 
