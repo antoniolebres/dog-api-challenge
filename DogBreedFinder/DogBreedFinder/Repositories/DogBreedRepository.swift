@@ -7,8 +7,14 @@
 
 import Foundation
 
+enum DogBreedRepositorySortOption {
+
+    case ascending
+    case descending
+}
+
 protocol DogBreedRepository: AnyObject {
 
-    func getBreeds(page: Int, pageSize: Int) async throws -> [Breed]
+    func getBreeds(page: Int, pageSize: Int, order: DogBreedRepositorySortOption) async throws -> [Breed]
     func searchBreeds(query: String) async throws -> [Breed]
 }

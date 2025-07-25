@@ -33,9 +33,41 @@ enum BreedImagesViewModelState {
     case error(Error)
 }
 
+enum SortOptions: String, CaseIterable {
+
+    case ascending = "A → Z"
+    case descending = "Z → A"
+
+    var value: DogBreedRepositorySortOption {
+
+        switch self {
+
+        case .ascending:
+            .ascending
+
+        case .descending:
+            .descending
+        }
+    }
+}
+
 class BreedImagesViewModel: ObservableObject {
 
     @Published var selectedViewPresentationType: BreedsPresentationType = UIDevice.isPad ? .grid : .list
+    @Published var selectedOrder: SortOptions = .ascending {
+
+        didSet {
+
+            if self.selectedOrder != oldValue {
+
+                Task { [weak self] in
+
+                    await self?.getBreedsFirstPage()
+                }
+            }
+        }
+    }
+
     @Published var state: BreedImagesViewModelState = .loading
 
     private var currentPage: Int = 0
@@ -50,18 +82,25 @@ class BreedImagesViewModel: ObservableObject {
 
         self.dogBreedRepository = dogBreedRepository
     }
+}
+
+// MARK: - Data
+
+extension BreedImagesViewModel {
+
+    @MainActor
+    func getBreedsFirstPage() async {
+
+        self.state = .loading
+        self.currentPage = 0
+
+        await self.getBreeds(reset: true)
+    }
 
     @MainActor
     func retry() async {
 
-        self.state = .loading
-
         await self.getBreedsFirstPage()
-    }
-
-    func getBreedsFirstPage() async {
-
-        await self.getBreeds(reset: true)
     }
 
     @MainActor
@@ -99,7 +138,8 @@ private extension BreedImagesViewModel {
 
             let newBreeds = try await self.dogBreedRepository.getBreeds(
                 page: self.currentPage,
-                pageSize: self.pageSize
+                pageSize: self.pageSize,
+                order: self.selectedOrder.value
             )
 
             if reset {

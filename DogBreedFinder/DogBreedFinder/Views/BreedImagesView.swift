@@ -63,6 +63,7 @@ struct BreedImagesView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
 
                 self.viewPresentationTypePicker
+                self.sortMenu
             }
         }
     }
@@ -107,11 +108,7 @@ private extension BreedImagesView {
 
             if isLoadingNextPage {
 
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .controlSize(.extraLarge)
-                    .tint(.brown)
-                    .background(.clear)
+                DogBreedProgressView()
             }
         }
     }
@@ -120,35 +117,33 @@ private extension BreedImagesView {
 
         List {
 
-            ForEach(breeds) { breed in
+            Group {
 
-                BreedRowView(
-                    breed: breed,
-                    textFont: UIDevice.isPad ? .body : .caption
-                )
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
-                .onTapGesture {
-                    self.router.navigate(to: .breedDetails(breed: breed))
-                }
-                .onAppear {
-                    Task {
-                        await self.viewModel.getBreedsNextPageIfNeeded(currentBreed: breed)
+                ForEach(breeds) { breed in
+
+                    BreedRowView(
+                        breed: breed,
+                        textFont: UIDevice.isPad ? .body : .caption
+                    )
+                    .onTapGesture {
+                        self.router.navigate(to: .breedDetails(breed: breed))
+                    }
+                    .onAppear {
+                        Task {
+                            await self.viewModel.getBreedsNextPageIfNeeded(currentBreed: breed)
+                        }
                     }
                 }
-            }
 
-            if isLoadingNextPage {
+                if isLoadingNextPage {
 
-                ProgressView()
-                    .id(UUID())
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                    .controlSize(.extraLarge)
-                    .frame(maxWidth: .infinity)
-                    .tint(.brown)
-                    .background(.clear)
+                    DogBreedProgressView()
+                        .id(UUID())
+                        .frame(maxWidth: .infinity)
+                }
             }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
         }
         .listStyle(.plain)
         .background(.clear)
@@ -171,6 +166,16 @@ private extension BreedImagesView {
         }
         .labelsHidden()
         .pickerStyle(.inline)
+    }
+
+    var sortMenu: some View {
+
+        Picker("Sort Order", selection: self.$viewModel.selectedOrder) {
+            ForEach(SortOptions.allCases, id: \.self) { order in
+                Text(order.rawValue)
+            }
+        }
+        .tint(.primary)
     }
 }
 

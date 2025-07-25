@@ -11,7 +11,7 @@ import Foundation
 
 class DummyRepository: DogBreedRepository {
 
-    func getBreeds(page: Int, pageSize: Int) async throws -> [Breed] {
+    func getBreeds(page: Int, pageSize: Int, order: DogBreedRepositorySortOption) async throws -> [Breed] {
 
         // Simulating network request
         try await Task.sleep(for: .seconds(2))

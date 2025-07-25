@@ -14,7 +14,10 @@ enum DogAPIResource: BaseRequestResource {
         static let pageSize = 20
     }
 
-    case getBreeds(page: Int, pageSize: Int = Constants.pageSize)
+    case getBreeds(page: Int,
+                   pageSize: Int = Constants.pageSize,
+                   order: DogBreedRepositorySortOption = .ascending)
+
     case searchBreeds(query: String)
 
     var path: String {
@@ -33,10 +36,11 @@ enum DogAPIResource: BaseRequestResource {
 
         switch self {
 
-        case .getBreeds(let page, let pageSize):
+        case .getBreeds(let page, let pageSize, let sortOption):
             return [
                 .init(name: "page", value: page.description),
-                .init(name: "limit", value: pageSize.description)
+                .init(name: "limit", value: pageSize.description),
+                .init(name: "order", value: Self.sortOption(from: sortOption))
             ]
 
         case .searchBreeds(let query):
@@ -62,6 +66,18 @@ enum DogAPIResource: BaseRequestResource {
                 .searchBreeds:
 
             return nil
+        }
+    }
+
+    private static func sortOption(from option: DogBreedRepositorySortOption) -> String {
+
+        switch option {
+
+        case .ascending:
+            "ASC"
+
+        case .descending:
+            "DESC"
         }
     }
 }
@@ -104,10 +120,10 @@ class DogAPIRepository: BaseRepository<DogAPIResource>, DogBreedRepository {
         super.init(baseURL: configuration.baseURLString)
     }
 
-    func getBreeds(page: Int, pageSize: Int) async throws -> [Breed] {
+    func getBreeds(page: Int, pageSize: Int, order: DogBreedRepositorySortOption) async throws -> [Breed] {
 
         try await self.request(
-            resource: .getBreeds(page: page, pageSize: pageSize),
+            resource: .getBreeds(page: page, pageSize: pageSize, order: order),
             additionalHeaders: self.authorizationHeader
         )
     }
